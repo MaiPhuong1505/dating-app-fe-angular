@@ -1,9 +1,0 @@
-<div class="card" style="width: 18rem;" *ngIf="member">
-    <img class="card-img-top" src="{{member.avatar}}" alt="{{member.knownAs}}">
-    <div class="card-body">
-      <h5 class="card-title">{{member.knownAs}}</h5>
-      <h6 class="card-subtitle mb-2 text-muted">{{member.city}} - {{member.gender}} - {{member.age}}</h6>
-      <p class="card-text">{{member.introduction}}</p>
-      <a href="/members/{{member.usename}}" class="btn btn-primary">Go somewhere</a>
-    </div>
-</div>
