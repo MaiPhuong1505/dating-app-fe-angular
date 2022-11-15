@@ -1,23 +1,23 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { AuthUser, UserToken } from '../_models/app-user';
+import { AuthUser, RegisterUser, UserToken } from '../_models/app-user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
   headers = new HttpHeaders({
-    'Content-Type' : 'application/json'
+    'Content-Type': 'application/json'
   });
 
-  baseURL = "https://localhost:7178/api/Auth/";
+  baseURL = "https://localhost:7178/api/auth/";
   private currentUser = new BehaviorSubject<UserToken | null>(null);
   currentUser$ = this.currentUser.asObservable();
 
   constructor(private httpClient: HttpClient) { }
 
-  login(authUser: AuthUser): Observable<any>{
+  login(authUser: AuthUser): Observable<any> {
     return this.httpClient.post(`${this.baseURL}login`, authUser, {
       responseType: 'text',
       headers: this.headers,
@@ -25,15 +25,15 @@ export class AccountService {
       .pipe(
         map((token) => {
           if (token) {
-            const userToken: UserToken = {username: authUser.username, token};
+            const userToken: UserToken = { username: authUser.username, token };
             localStorage.setItem("userToken", JSON.stringify(token));
             this.currentUser.next(userToken);
           }
         }
         ));
-   }
-  logout(){
-    this.currentUser.next (null);
+  }
+  logout() {
+    this.currentUser.next(null);
     localStorage.removeItem("userToken");
   }
   reLogin() {
@@ -44,8 +44,20 @@ export class AccountService {
     }
   }
 
-  register(){
-
+  register(registerUser: RegisterUser) {
+    return this.httpClient.post(`${this.baseURL}register`, registerUser, {
+      responseType: 'text',
+      headers: this.headers,
+    })
+      .pipe(
+        map((token) => {
+          if (token) {
+            const userToken: UserToken = { username: registerUser.username, token };
+            localStorage.setItem("userToken", JSON.stringify(token));
+            this.currentUser.next(userToken);
+          }
+        }
+        ));
   }
 }
 
